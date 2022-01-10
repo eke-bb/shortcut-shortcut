@@ -4,9 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "watch:build": "tsc -p ./_tsconfig.json",
-    "serve": "nodemon ./server.ts",
-    "server": "yarn run watch:build && yarn run serve"
+    "server": "nodemon ./server.ts"
   },
   "dependencies": {
     "@types/express": "^4.17.13",
