@@ -108,7 +108,6 @@ const app = new Vue({
       });
 
       const data = await response.json();
-      console.log({ members: data });
       this.models.members = data.filter((member) => member.group_ids.includes(groupId));
     },
 
@@ -145,7 +144,6 @@ const app = new Vue({
           story.epic_id = epic.id;
 
           try {
-            console.log(JSON.stringify(story));
             const response = await fetch("https://api.app.shortcut.com/api/v3/stories", {
               method: "POST",
               headers: {
@@ -155,10 +153,9 @@ const app = new Vue({
               body: JSON.stringify(story),
             });
             const data = await response.json();
-            console.log({ epic_id: epic.id, response: data });
             this.models.stories = [];
           } catch (err) {
-            console.log("request error", { msg: err.message, err });
+            console.warn("request error", { msg: err.message, err });
           }
         }
       }
