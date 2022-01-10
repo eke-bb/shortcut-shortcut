@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shortcut Shortcut</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+
+<body>
+  <div id="app">
+    <div v-if="!apiKey">loading...</div>
+    <div v-if="apiKey">
+      <div class="card">
+        <div class="card-title">Milestone ID</div>
+        <input type="text" v-model="models.milestoneId" placeholder="milestone id" />
+        <button v-on:click="loadEpics">load</button>
+      </div>
+
+      <div v-if="models.epics.length > 0" class="epics card">
+        <div class="card-title with-action-button">
+          Epics
+          <button v-on:click="loadEpics">reload</button>
+        </div>
+        <div v-for="epic in models.epics" class="epic">
+          <span>{{ epic.name }}</span>
+          <button v-on:click="removeEpicFromList(epic)">x</button>
+        </div>
+      </div>
+
+      <div v-if="models.epics.length > 0" class="stories">
+        <div class="new-story card">
+          <div class="card-title">new story</div>
+
+          <div class="form-field">
+            <input type="text" v-model="models.newStory.name" placeholder="name" />
+          </div>
+
+          <div class="form-field">
+            <textarea v-model="models.newStory.description" placeholder="description"></textarea>
+          </div>
+
+          <div class="form-field">
+            <div>owner(s)</div>
+            <div>
+              <template v-for="member in models.members">
+                <label :for="'new_story_member_owner_' + member.id">
+                  <input type="checkbox" v-model="models.newStory.owner_ids" :value="member.id"
+                    :id="'new_story_member_owner_' + member.id" />
+                  {{ member.profile.name }}
+                </label>
+              </template>
+            </div>
+          </div>
+
+          <div class="form-field">
+            story type
+            <select v-model="models.newStory.story_type">
+              <option v-for="(storyType, index) in models.storyTypes" :value="storyType">{{
+                storyType }}</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            team
+            <select v-model="models.newStory.group_id">
+              <option v-for="(group, index) in models.groups" :value="group.id">{{ group.name }}
+              </option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            State
+            <select v-model="models.newStory.workflow_state_id">
+              <option v-for="(workflowState, index) in models.workflowStates" :value="workflowState.id">{{
+                workflowState.name }}
+              </option>
+            </select>
+          </div>
+
+          <div>
+            <button v-on:click="addNewStory">add</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            Stories
+          </div>
+
+          <div v-if="models.stories.length === 0">no stories added yet</div>
+
+          <div class="story card" v-for="(story, index) in models.stories">
+            <div class="card-title with-action-button">
+              <input type="text" v-model="models.stories[index].name" placeholder="name" />
+              <button v-on:click="removeStory(index)">X</button>
+            </div>
+
+            <div class="form-field">
+              <textarea v-model="models.stories[index].description" placeholder="description"></textarea>
+            </div>
+
+            <div class="form-field">
+              <div>owner(s)</div>
+              <div>
+                <template v-for="member in models.members">
+                  <label :for="'new_story_member_owner_' + member.id">
+                    <input type="checkbox" v-model="models.stories[index].owner_ids" :value="member.id"
+                      :id="'new_story_member_owner_' + member.id" />
+                    {{ member.profile.name }}
+                  </label>
+                </template>
+              </div>
+            </div>
+
+            <div class="form-field">
+              story type
+              <select v-model="models.stories[index].story_type">
+                <option v-for="(storyType, index) in models.storyTypes" :value="storyType">{{
+                  storyType }}</option>
+              </select>
+            </div>
+
+            <div class="form-field">
+              team
+              <select v-model="models.stories[index].group_id">
+                <option v-for="(group, index) in models.groups" :value="group.id">{{ group.name
+                  }}</option>
+              </select>
+            </div>
+
+            <div class="form-field">
+              State
+              <select v-model="models.stories[index].workflow_state_id">
+                <option v-for="(workflowState, index) in models.workflowStates" :value="workflowState.id">{{
+                  workflowState.name
+                  }}
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <div class="card-footer">
+            <button v-on:click="saveAllStories">Save All</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <script src="/static/js/app.js" type="module"></script>
+</body>
+
+</html>
